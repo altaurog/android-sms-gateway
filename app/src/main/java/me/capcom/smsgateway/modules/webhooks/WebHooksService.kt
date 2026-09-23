@@ -6,7 +6,6 @@ import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import me.capcom.smsgateway.R
 import me.capcom.smsgateway.domain.EntitySource
 import me.capcom.smsgateway.helpers.BuildHelper
-import me.capcom.smsgateway.modules.gateway.GatewaySettings
 import me.capcom.smsgateway.modules.localserver.LocalServerSettings
 import me.capcom.smsgateway.modules.logs.LogsService
 import me.capcom.smsgateway.modules.logs.db.LogEntry
@@ -26,7 +25,6 @@ import java.net.URL
 class WebHooksService(
     private val webHooksDao: WebHooksDao,
     private val localServerSettings: LocalServerSettings,
-    private val gatewaySettings: GatewaySettings,
     private val webhooksSettings: WebhooksSettings,
     private val notificationsService: NotificationsService,
     private val logsService: LogsService,
@@ -136,7 +134,7 @@ class WebHooksService(
                     return@forEach
                 }
 
-                (webhook.source == EntitySource.Cloud || webhook.source == EntitySource.Gateway) && !gatewaySettings.enabled -> {
+                webhook.source == EntitySource.Cloud || webhook.source == EntitySource.Gateway -> {
                     skippedCount++
                     return@forEach
                 }
@@ -144,7 +142,7 @@ class WebHooksService(
 
             val deviceId = when (webhook.source) {
                 EntitySource.Local -> localServerSettings.deviceId
-                EntitySource.Cloud, EntitySource.Gateway -> gatewaySettings.deviceId
+                EntitySource.Cloud, EntitySource.Gateway -> null
             } ?: run {
                 skippedCount++
                 return@forEach

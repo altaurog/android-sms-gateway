@@ -6,12 +6,6 @@
         app:summary="@string/port_credentials_etc"
         app:title="@string/local_server_dotdotdot" />
     <Preference
-        android:icon="@drawable/ic_cloud_server"
-        app:fragment="me.capcom.smsgateway.ui.settings.CloudServerSettingsFragment"
-        app:summary="@string/api_url_private_token_credentials_etc"
-        app:title="@string/cloud_server_dotdotdot" />
-
-    <Preference
         android:icon="@drawable/ic_messages"
         app:fragment="me.capcom.smsgateway.ui.settings.MessagesSettingsFragment"
         app:title="@string/messages"

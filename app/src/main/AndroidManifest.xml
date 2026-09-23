@@ -31,24 +31,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmsGateway">
         <service
-            android:name=".modules.gateway.services.SSEForegroundService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
-        <service
             android:name=".modules.ping.services.PingForegroundService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-
-        <service
-            android:name=".services.PushService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
         <receiver
             android:name=".receivers.EventsReceiver"

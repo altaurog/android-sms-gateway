@@ -3,7 +3,6 @@ package me.capcom.smsgateway.modules.settings
 import android.content.Context
 import me.capcom.smsgateway.R
 import me.capcom.smsgateway.modules.encryption.EncryptionSettings
-import me.capcom.smsgateway.modules.gateway.GatewaySettings
 import me.capcom.smsgateway.modules.incoming.IncomingMessagesSettings
 import me.capcom.smsgateway.modules.logs.LogsSettings
 import me.capcom.smsgateway.modules.messages.MessagesSettings
@@ -15,7 +14,6 @@ class SettingsService(
     private val context: Context,
     private val notificationsService: NotificationsService,
     encryptionSettings: EncryptionSettings,
-    gatewaySettings: GatewaySettings,
     incomingMessagesSettings: IncomingMessagesSettings,
     messagesSettings: MessagesSettings,
     pingSettings: PingSettings,
@@ -24,7 +22,6 @@ class SettingsService(
 ) {
     private val settings = mapOf(
         "encryption" to encryptionSettings,
-        "gateway" to gatewaySettings,
         "incoming" to incomingMessagesSettings,
         "messages" to messagesSettings,
         "ping" to pingSettings,
