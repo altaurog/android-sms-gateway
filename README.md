@@ -151,6 +151,12 @@ The project provides two pre-built variants:
 - **Secure (release) build**: Production-ready with strict security configurations. This is the recommended build for production deployments.
 - **Insecure build**: For development and testing with cleartext traffic allowed. **This build should never be used in public environments.**
 
+### Local-Only Build
+
+This fork removes Firebase Cloud Messaging and the entire Cloud Server module (registration, SSE listener, cloud API client, sync workers, and their settings UI). It no longer requires a `google-services.json` to build, and has no code paths that reach any server other than the webhooks you configure yourself. Local Server mode and webhooks work exactly as in upstream.
+
+To build it yourself, push this repo to your own GitHub account and run the `.github/workflows/build-local.yml` workflow (manually via `workflow_dispatch`, or automatically on push). It builds an unsigned debug APK with no signing or Firebase secrets required, and uploads it as a workflow artifact. Actions must be enabled on the fork first (one-time, under the **Actions** tab).
+
 ### Prerequisites
 
 You need an Android device with Android 5.0 (Lollipop) or above for using the application.
