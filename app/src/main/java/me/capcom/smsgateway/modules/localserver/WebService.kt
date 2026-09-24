@@ -33,6 +33,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import io.ktor.util.date.GMTDate
+import kotlinx.coroutines.runBlocking
 import me.capcom.smsgateway.R
 import me.capcom.smsgateway.domain.HealthResponse
 import me.capcom.smsgateway.extensions.configure
@@ -48,8 +49,11 @@ import me.capcom.smsgateway.modules.localserver.routes.InboxRoutes
 import me.capcom.smsgateway.modules.localserver.routes.LogsRoutes
 import me.capcom.smsgateway.modules.localserver.routes.MessagesRoutes
 import me.capcom.smsgateway.modules.localserver.routes.WebhooksRoutes
+import me.capcom.smsgateway.modules.logs.LogsService
+import me.capcom.smsgateway.modules.logs.db.LogEntry
 import me.capcom.smsgateway.modules.notifications.NotificationsService
 import me.capcom.smsgateway.helpers.SubscriptionsHelper
+import me.capcom.smsgateway.providers.LocalIPProvider
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import java.util.Date
@@ -60,7 +64,22 @@ class WebService : Service() {
     private val settings: LocalServerSettings by inject()
     private val notificationsService: NotificationsService by inject()
     private val healthService: HealthService by inject()
+    private val logsService: LogsService by inject()
     private val jwtService: JwtService by lazy { JwtService(get(), get(), get(), get()) }
+
+    // Bind only to the Wi-Fi interface so the server isn't reachable over
+    // cellular data. If no Wi-Fi IP can be resolved (Wi-Fi off/disconnected),
+    // fall back to loopback-only rather than listening on every interface.
+    private val bindHost: String by lazy {
+        runBlocking { LocalIPProvider(this@WebService).getIP() } ?: run {
+            logsService.insert(
+                LogEntry.Priority.WARN,
+                "WebService",
+                "No Wi-Fi IP address found; local server bound to loopback only and will not be reachable from the network"
+            )
+            "127.0.0.1"
+        }
+    }
 
     private val wakeLock: PowerManager.WakeLock by lazy {
         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -78,6 +97,7 @@ class WebService : Service() {
         embeddedServer(
             Netty,
             port = port,
+            host = bindHost,
             watchPaths = emptyList(),
         ) {
             install(Authentication) {
