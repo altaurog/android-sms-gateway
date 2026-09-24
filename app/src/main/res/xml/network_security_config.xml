@@ -4,7 +4,6 @@
         <trust-anchors>
             <certificates src="user" />
             <certificates src="system" />
-            <certificates src="@raw/ca" />
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="true">
