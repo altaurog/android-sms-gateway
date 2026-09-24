@@ -85,7 +85,6 @@ class SendWebhookWorker(appContext: Context, params: WorkerParameters) :
                     message = "Webhook sent successfully",
                     context = mapOf(
                         "url" to inputData.getString(INPUT_URL),
-                        "data" to payload,
                     )
                 )
 
@@ -102,7 +101,6 @@ class SendWebhookWorker(appContext: Context, params: WorkerParameters) :
                     message = "Webhook failed: ${result.error}",
                     context = mapOf(
                         "url" to inputData.getString(INPUT_URL),
-                        "data" to payload,
                     )
                 )
 
@@ -119,7 +117,6 @@ class SendWebhookWorker(appContext: Context, params: WorkerParameters) :
                     message = "Webhook failed with retry: ${result.reason}",
                     context = mapOf(
                         "url" to inputData.getString(INPUT_URL),
-                        "data" to payload,
                     )
                 )
                 ListenableWorker.Result.retry()
