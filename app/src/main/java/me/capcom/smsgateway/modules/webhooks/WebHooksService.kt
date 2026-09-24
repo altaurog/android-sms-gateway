@@ -121,6 +121,7 @@ class WebHooksService(
         webHooksDao.delete(source, id)
     }
 
+    @Suppress("DEPRECATION")
     fun emit(context: Context, event: WebHookEvent, payload: Any) {
         val webhooksToProcess = webHooksDao.selectByEvent(event)
         var queuedCount = 0

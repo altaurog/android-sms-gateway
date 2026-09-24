@@ -99,7 +99,7 @@ class MessagesListFragment : Fragment(), MessagesAdapter.OnItemClickListener<Mes
             }
         }
 
-        binding.filterChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             when (checkedIds.firstOrNull()) {
                 R.id.filterAll -> viewModel.setFilter(null)
                 R.id.filterPending -> viewModel.setFilter(ProcessingState.Pending)

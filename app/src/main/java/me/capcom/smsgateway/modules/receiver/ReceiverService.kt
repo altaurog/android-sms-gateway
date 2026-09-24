@@ -210,7 +210,7 @@ class ReceiverService : KoinComponent {
     ) {
         val grouped = payloads.groupBy { it.first }
 
-        grouped.forEach { (eventType, items) ->
+        grouped.forEach eventLoop@{ (eventType, items) ->
             val batchPayloads = items.map { it.second }
 
             batchPayloads.chunked(BATCH_SIZE).forEach { chunk ->
@@ -309,15 +309,15 @@ class ReceiverService : KoinComponent {
 
         val messages = mutableListOf<InboxMessage>()
 
-        cursor?.use { cursor ->
-            while (cursor.moveToNext()) {
+        cursor?.use { c ->
+            while (c.moveToNext()) {
                 messages.add(
                     InboxMessage.Text(
-                        address = cursor.getString(1),
-                        date = Date(cursor.getLong(2)),
-                        text = cursor.getString(3),
+                        address = c.getString(1),
+                        date = Date(c.getLong(2)),
+                        text = c.getString(3),
                         subscriptionId = when {
-                            projection.size > 4 -> cursor.getInt(4).takeIf { it >= 0 }
+                            projection.size > 4 -> c.getInt(4).takeIf { it >= 0 }
                             else -> null
                         }
                     )

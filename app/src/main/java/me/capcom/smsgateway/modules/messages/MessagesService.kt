@@ -479,7 +479,7 @@ class MessagesService(
         // whenever the platform exposes one.
         val subscriptionId = simNumber?.let { SubscriptionsHelper.getSubscriptionId(context, it) }
         val fromMsisdn = simNumber?.let { SubscriptionsHelper.getPhoneNumber(context, it) }
-            ?: SubscriptionsHelper.getActiveSimCards(context)?.firstOrNull()?.phoneNumber
+            ?: SubscriptionsHelper.getActiveSimCards(context).firstOrNull()?.phoneNumber
 
         val decryptedContent = if (message.isEncrypted) {
             MessageContent.Mms(

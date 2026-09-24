@@ -148,7 +148,7 @@ class InboxRoutes(
 
             call.response.headers.append("X-Total-Count", total.toString())
 
-            call.respond(messages.map { it.toDomain(includeAttachments) } as GetIncomingMessagesResponse)
+            call.respond(messages.map { it.toDomain(includeAttachments) })
         }
 
         get("{id}/attachments/{partId}") {

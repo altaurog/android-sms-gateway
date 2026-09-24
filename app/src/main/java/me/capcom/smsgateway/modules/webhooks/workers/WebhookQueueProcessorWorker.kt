@@ -216,7 +216,7 @@ class WebhookQueueProcessorWorker(
      * Process webhook events from the queue with priority handling.
      */
     private suspend fun processWebhookQueue(): Int = withContext(Dispatchers.IO) {
-        var totalProcessed = 0
+        val totalProcessed: Int
 
         try {
             // Recover any stuck webhooks first

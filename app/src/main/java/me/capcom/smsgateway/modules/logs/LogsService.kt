@@ -25,10 +25,10 @@ class LogsService(
         from: Long? = null,
         to: Long? = null
     ): List<LogEntry> {
-        val from = from ?: 0
-        val to = to ?: System.currentTimeMillis()
+        val fromTs = from ?: 0
+        val toTs = to ?: System.currentTimeMillis()
 
-        return dao.selectByPeriod(from, to)
+        return dao.selectByPeriod(fromTs, toTs)
     }
 
     fun insert(

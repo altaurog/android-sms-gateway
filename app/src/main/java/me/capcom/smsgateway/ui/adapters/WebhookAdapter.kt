@@ -16,6 +16,7 @@ import me.capcom.smsgateway.modules.webhooks.domain.WebHookDTO
 class WebhookAdapter : ListAdapter<WebHookDTO, WebhookAdapter.ViewHolder>(WebhookDiffCallback()) {
     class ViewHolder(private val binding: ItemWebhookBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @Suppress("DEPRECATION")
         fun bind(webhook: WebHookDTO) {
             binding.apply {
                 idText.text = binding.root.context.getString(R.string.webhook_id_format, webhook.id)

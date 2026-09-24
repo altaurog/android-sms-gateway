@@ -30,7 +30,7 @@ class EventsReceiver : EventsReceiver() {
             }
 
             launch {
-                eventBus.collect<MessageStateChangedEvent> { event ->
+                eventBus.collect<MessageStateChangedEvent> stateChanged@{ event ->
                     Log.d("EventsReceiver", "Event: $event")
 
                     val webhookEventType = when (event.state) {
@@ -38,7 +38,7 @@ class EventsReceiver : EventsReceiver() {
                         ProcessingState.Delivered -> WebHookEvent.SmsDelivered
                         ProcessingState.Failed -> WebHookEvent.SmsFailed
                         ProcessingState.Cancelled -> WebHookEvent.SmsCancelled
-                        else -> return@collect
+                        else -> return@stateChanged
                     }
 
                     // Get sender's device number using SubscriptionsHelper

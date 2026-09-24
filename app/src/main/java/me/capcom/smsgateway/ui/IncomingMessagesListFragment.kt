@@ -83,11 +83,10 @@ class IncomingMessagesListFragment : Fragment() {
                 IncomingMessageType.DATA_SMS -> { if (!binding.filterDataSms.isChecked) binding.filterDataSms.isChecked = true }
                 IncomingMessageType.MMS,
                 IncomingMessageType.MMS_DOWNLOADED -> { if (!binding.filterMms.isChecked) binding.filterMms.isChecked = true }
-                else -> { if (!binding.filterAll.isChecked) binding.filterAll.isChecked = true }
             }
         }
 
-        binding.filterChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             when (checkedIds.firstOrNull()) {
                 R.id.filterAll -> viewModel.setFilter(null)
                 R.id.filterSms -> viewModel.setFilter(IncomingMessageType.SMS)

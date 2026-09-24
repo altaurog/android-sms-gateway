@@ -50,13 +50,13 @@ class WebhooksSettings(
 
                 RETRY_COUNT -> {
                     val retryCount = value?.toString()?.toFloat()?.toInt() ?: 15
-                    if (retryCount != null && retryCount < 1) {
+                    if (retryCount < 1) {
                         throw IllegalArgumentException("Retry count must be >= 1")
                     }
 
                     val changed = this.retryCount != retryCount
 
-                    storage.set(key, retryCount?.toString())
+                    storage.set(key, retryCount.toString())
 
                     changed
                 }
