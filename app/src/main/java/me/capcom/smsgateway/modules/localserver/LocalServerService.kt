@@ -44,7 +44,7 @@ class LocalServerService(
         WebService.stop(context)
     }
 
-    fun isActiveLiveData(_: Context) = WebService.STATUS
+    fun isActiveLiveData(context: Context) = WebService.STATUS
 
     companion object {
         private val job = SupervisorJob()
