@@ -20,7 +20,6 @@ import me.capcom.smsgateway.modules.ping.pingModule
 import me.capcom.smsgateway.modules.receiver.receiverModule
 import me.capcom.smsgateway.modules.settings.settingsModule
 import me.capcom.smsgateway.modules.webhooks.webhooksModule
-import me.capcom.smsgateway.receivers.EventsReceiver
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -66,8 +65,6 @@ class App: Application() {
         )
 
         instance = this
-
-        EventsReceiver.register(this)
 
         get<OrchestratorService>().start(this, true)
     }
