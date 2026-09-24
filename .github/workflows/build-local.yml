@@ -31,7 +31,34 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
+      # Signed with a stable key so each build installs over the previous one.
+      # Provisioned by scripts/setup-signing.sh.
+      - name: Decode signing keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.LOCAL_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::LOCAL_KEYSTORE_BASE64 is not set. Run scripts/setup-signing.sh first."
+            exit 1
+          fi
+          printf '%s' "$KEYSTORE_B64" | base64 -d > app/local-keystore.jks
+
+      # Stamped after the cache step: these edits change build.gradle, which the
+      # cache key hashes, so stamping earlier would miss the cache every run.
+      - name: Stamp version
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          VERSION_NAME="${RUN_NUMBER}_$(date -u +%Y-%m-%d)"
+          sed -i "s/versionCode .*/versionCode ${RUN_NUMBER}/" app/build.gradle
+          sed -i "s/versionName .*/versionName \"${VERSION_NAME}\"/" app/build.gradle
+          echo "Building versionCode=${RUN_NUMBER} versionName=${VERSION_NAME}"
+
       - name: Build debug APK
+        env:
+          LOCAL_STORE_PASSWORD: ${{ secrets.LOCAL_STORE_PASSWORD }}
+          LOCAL_KEY_ALIAS: ${{ secrets.LOCAL_KEY_ALIAS }}
+          LOCAL_KEY_PASSWORD: ${{ secrets.LOCAL_KEY_PASSWORD }}
         run: ./gradlew assembleDebug
 
       - name: Upload APK
